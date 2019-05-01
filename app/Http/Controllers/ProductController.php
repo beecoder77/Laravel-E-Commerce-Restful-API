@@ -53,6 +53,7 @@ class ProductController extends Controller
         $product->diskon = $request->diskon;
         $product->save();
 
+        //respon
         return response([
             'data' => new ProductResource($product)
         ],Response::HTTP_CREATED);
@@ -89,7 +90,15 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        // //karena di rawnya deskripsi maka diubah dulu jadi detail sesuai dengan db
+        // $request['detail'] = $request->deskripsi;
+        // unset($request['deskripsi']);
+        //ini buat ngubah semuanya
+        $product->update($request->all());
+        //respon
+        return response([
+            'data' => new ProductResource($product)
+        ],Response::HTTP_CREATED);
     }
 
     /**
