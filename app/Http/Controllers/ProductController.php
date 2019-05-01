@@ -8,6 +8,8 @@ use App\Http\Resources\Product\ProductResource;
 use App\Model\Product;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
+use App\Exceptions\ProductNotBelongsToUser;
 
 class ProductController extends Controller
 {
@@ -90,6 +92,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        $this->ProductUserCheck($product);
         // //karena di rawnya deskripsi maka diubah dulu jadi detail sesuai dengan db
         // $request['detail'] = $request->deskripsi;
         // unset($request['deskripsi']);
@@ -99,6 +102,13 @@ class ProductController extends Controller
         return response([
             'data' => new ProductResource($product)
         ],Response::HTTP_CREATED);
+    }
+
+    public function ProductUserCheck($product)
+    {
+        if (Auth::id() !== $product->user_id) {
+            throw new ProductNotBelongsToUser;
+        }
     }
 
     /**
