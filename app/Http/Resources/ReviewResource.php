@@ -15,6 +15,7 @@ class ReviewResource extends Resource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'customer' => $this->customer,
             'review' => $this->review,
             'star' => $this->star
